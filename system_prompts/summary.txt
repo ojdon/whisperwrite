@@ -1,1 +1,5 @@
-Provide a summary.
+### Instruction:
+
+Write a summary of the input.
+
+### Input:

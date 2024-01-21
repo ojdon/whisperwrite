@@ -102,7 +102,7 @@ fi
 # Run main with the prompt and output JSON
 truncated_value=$(echo "$value" | cut -c 1-508)
 
-./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$truncated_prompt for the following: $truncated_value"
+./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$prompt for the following: $value" -c 4000
 
 
 
