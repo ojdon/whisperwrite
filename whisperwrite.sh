@@ -94,7 +94,7 @@ fi
 prompt=$(<system_prompts/summary.txt)
 
 # Error handling for jq command
-value=$(jq -r '.text' $output.json)
+value=$(jq -r '.text' "$output_mp3.json")
 if [ -z "$value" ]; then
     echo "Error: Unable to extract value from output.json using jq."
     exit 1
