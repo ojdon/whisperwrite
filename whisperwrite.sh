@@ -94,7 +94,7 @@ fi
 prompt=$(<system_prompts/summary.txt)
 
 # Error handling for jq command
-value=$(jq -r '.text' output.json)
+value=$(jq -r '.text' $output.json)
 if [ -z "$value" ]; then
     echo "Error: Unable to extract value from output.json using jq."
     exit 1
@@ -102,7 +102,7 @@ fi
 # Run main with the prompt and output JSON
 truncated_value=$(echo "$value" | cut -c 1-508)
 
-./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$prompt for the following: $value" -c 4000
+./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$prompt for the following: $value" -c 4000 -b 4000 --temp 0.2
 
 
 
