@@ -81,28 +81,28 @@ ffmpeg -i "$video_file" -vn -acodec libmp3lame -ar 44100 -ac 2 -ab 192k "$output
 echo "Conversion to MP3 completed. MP3 file saved as: $output_mp3"
 
 # Run insanely-fast-whisper to transcribe
-insanely-fast-whisper --file-name "$output_mp3" --transcript-path "$output_mp3.json" --batch-size 2 --device-id mps
+insanely-fast-whisper --file-name "$output_mp3" --task translate --transcript-path "$output_mp3.json" --batch-size 2 --device-id mps
 
 # Remove the tempory audio file
 rm "$output_mp3"
 
-# Error handling for reading prompt
-if [ ! -f "system_prompts/summary.txt" ]; then
-    echo "Error: system_prompts/summary.txt not found."
-    exit 1
-fi
-prompt=$(<system_prompts/summary.txt)
+# # Error handling for reading prompt
+# if [ ! -f "system_prompts/summary.txt" ]; then
+#     echo "Error: system_prompts/summary.txt not found."
+#     exit 1
+# fi
+# prompt=$(<system_prompts/summary.txt)
 
-# Error handling for jq command
-value=$(jq -r '.text' "$output_mp3.json")
-if [ -z "$value" ]; then
-    echo "Error: Unable to extract value from output.json using jq."
-    exit 1
-fi
-# Run main with the prompt and output JSON
-truncated_value=$(echo "$value" | cut -c 1-508)
+# # Error handling for jq command
+# value=$(jq -r '.text' "$output_mp3.json")
+# if [ -z "$value" ]; then
+#     echo "Error: Unable to extract value from output.json using jq."
+#     exit 1
+# fi
+# # Run main with the prompt and output JSON
+# truncated_value=$(echo "$value" | cut -c 1-508)
 
-./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$prompt for the following: $value" -c 4000 -b 4000 --temp 0.2
+# ./llama.cpp/main -m ./llama.cpp/models/llama-2-7b-chat.Q4_K_M.gguf -n 1024 -ngl 1 -p "$prompt $value" -c 4000 -b 4000 --temp 0.2
 
 
 
